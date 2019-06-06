@@ -3,6 +3,7 @@ package com.ybzbcq.mapper;
 import com.ybzbcq.model.InfoUser;
 
 import java.util.List;
+import java.util.Map;
 
 public interface InfoUserMapper {
     int deleteByPrimaryKey(Integer id);
@@ -17,5 +18,7 @@ public interface InfoUserMapper {
 
     int updateByPrimaryKey(InfoUser record);
 
-    List<InfoUser> selectByMultCondition(InfoUser record);
+    List<InfoUser> selectByMultCondition(Map<String, Object> map);
+
+    int qryCount();
 }

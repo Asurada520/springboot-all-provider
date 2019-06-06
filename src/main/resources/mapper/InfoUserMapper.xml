@@ -91,9 +91,16 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-    <select id="selectByMultCondition" resultMap="BaseResultMap" parameterType="com.ybzbcq.model.InfoUser" >
+    <select id="selectByMultCondition" resultMap="BaseResultMap" parameterType="java.util.Map" >
         select
         <include refid="Base_Column_List" />
+        from info_user
+        LIMIT #{currentPage,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </select>
+
+    <select id="qryCount" resultMap="BaseResultMap" >
+        select
+        COUNT(1)
         from info_user
     </select>
 </mapper>

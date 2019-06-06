@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Administrator
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<InfoUser> selectByMultCondition(InfoUser infoUser) {
+    public List<InfoUser> selectByMultCondition(Map<String, Object> map) {
 
         List<InfoUser> infoUsers = (List<InfoUser>)redisTemplate.opsForValue().get("infoUsers");
 
@@ -56,12 +57,17 @@ public class UserServiceImpl implements UserService {
             synchronized (this){
                 infoUsers = (List<InfoUser>)redisTemplate.opsForValue().get("infoUsers");
                 if(CollectionUtils.isEmpty(infoUsers)){
-                    infoUsers = infoUserMapper.selectByMultCondition(infoUser);
+                    infoUsers = infoUserMapper.selectByMultCondition(map);
                     redisTemplate.opsForValue().set("infoUsers", infoUsers);
                 }
             }
         }
 
         return infoUsers;
+    }
+
+    @Override
+    public int qryCount() {
+        return infoUserMapper.qryCount();
     }
 }
