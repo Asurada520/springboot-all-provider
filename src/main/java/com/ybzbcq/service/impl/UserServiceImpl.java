@@ -7,7 +7,6 @@ import com.ybzbcq.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -48,20 +47,36 @@ public class UserServiceImpl implements UserService {
         return infoUserMapper.updateByPrimaryKeySelective(infoUser);
     }
 
+    /**
+     * 数据一致性没有解决 暂时注释掉这个地方
+     * @param map
+     * @return
+     */
     @Override
     public List<InfoUser> selectByMultCondition(Map<String, Object> map) {
 
-        List<InfoUser> infoUsers = (List<InfoUser>)redisTemplate.opsForValue().get("infoUsers");
+        // 字符串的序列化器
+//        RedisSerializer redisSerializer = new StringRedisSerializer();
+//        redisTemplate.setKeySerializer(redisSerializer);
 
-        if(CollectionUtils.isEmpty(infoUsers)){
+//        List<InfoUser> infoUsers = (List<InfoUser>)redisTemplate.opsForValue().get("infoUsers");
+
+        List<InfoUser> infoUsers = infoUserMapper.selectByMultCondition(map);
+
+        /*if(CollectionUtils.isEmpty(infoUsers)){
             synchronized (this){
                 infoUsers = (List<InfoUser>)redisTemplate.opsForValue().get("infoUsers");
                 if(CollectionUtils.isEmpty(infoUsers)){
+
+                    // json 对象序列化器
+                    redisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+                    redisTemplate.setValueSerializer(redisSerializer);
+
                     infoUsers = infoUserMapper.selectByMultCondition(map);
                     redisTemplate.opsForValue().set("infoUsers", infoUsers);
                 }
             }
-        }
+        }*/
 
         return infoUsers;
     }

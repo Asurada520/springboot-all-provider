@@ -98,7 +98,7 @@
         LIMIT #{currentPage,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
     </select>
 
-    <select id="qryCount" resultMap="BaseResultMap" >
+    <select id="qryCount" resultType="java.lang.Integer" >
         select
         COUNT(1)
         from info_user
